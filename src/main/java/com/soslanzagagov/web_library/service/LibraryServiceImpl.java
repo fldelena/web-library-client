@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LibraryServiceImpl implements LibraryService{
+public class LibraryServiceImpl implements LibraryService {
 
     @Autowired
     LibraryServer libraryServer;

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,27 +19,31 @@ public class MyController {
     LibraryService libraryService;
 
     @RequestMapping("/books")
-    public String showAllBooks(Model model){
+    public String showAllBooks(Model model) {
         List<Book> books = libraryService.getAllBooks();
         model.addAttribute("allBooks", books);
         return "all-books";
     }
 
     @RequestMapping("/addBook")
-    public String addBook(Model model){
+    public String addBook(Model model) {
         Book book = new Book();
         model.addAttribute("newBook", book);
         return "book-info";
     }
 
     @RequestMapping("/saveBook")
-    public String saveBook(@ModelAttribute("newBook") Book book){
-        libraryService.addBook(book);
+    public String saveBook(@ModelAttribute("newBook") Book book) {
+        if (book.getId() == 0) {
+            libraryService.addBook(book);
+        } else {
+            libraryService.changeBook(book);
+        }
         return "redirect:/books";
     }
 
     @RequestMapping("/updateBook")
-    public String updateEmployee(@RequestParam("bookId") int id, Model model){
+    public String updateEmployee(@RequestParam("bookId") int id, Model model) {
 
         Book book = libraryService.getBook(id);
         model.addAttribute("newBook", book);
@@ -48,21 +51,9 @@ public class MyController {
     }
 
     @RequestMapping("/deleteBook")
-    public String deleteEmployee(@RequestParam("bookId") int id){
+    public String deleteEmployee(@RequestParam("bookId") int id) {
 
         libraryService.deleteBook(id);
         return "redirect:/books";
     }
-
-
-//    @GetMapping("/books")
-//    public String showBook(Model model){
-//        Book book = libraryService.getBook();
-//        return "book_info";
-//    }
-
-
-
-
-
 }
